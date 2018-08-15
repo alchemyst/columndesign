@@ -21,10 +21,9 @@ def table_psi(Flv, flood):
 def table_K2(h):
     """Figure 11-30
     
-    Regression by Dazzles
-    """
-    a, b, c = 2.559167168165785, -0.016956612594182813, 20.899745052778048
-    return a*numpy.log(h) + b*h + c
+    Regression by Carl Sandrock"""
+    a, b, c, d = 26.52258403,  0.76197575, 13.23116619, 33.1867269
+    return a + b*numpy.sqrt(numpy.abs(h - c)) - (h - c)/d
 
 
 def table_C0(A_ratio, P_ratio):
@@ -113,7 +112,7 @@ def check_design(parameters, design):
     names = CONSTRAINT_NAMES + [f'{n} at turndown' for n in CONSTRAINT_NAMES]
     values = columnconstraints(parameters, design)
     for v, n in zip(values, names):
-        status = True if v > 0 else False
+        status = '✅' if v > 0 else '🚫'
         print(f'{status} {n}: {v}')
 
 if __name__ == "__main__":
