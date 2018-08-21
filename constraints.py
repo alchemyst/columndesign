@@ -1,4 +1,6 @@
 import numpy
+from costs import materials
+from classes import Parameters, Design
 
 def table_K1(Flv, l_spacing):
     """Figure 11-27
@@ -35,15 +37,15 @@ def table_C0(A_ratio, P_ratio):
     return a*A_ratio + b*P_ratio**2 + c*P_ratio + d
 
 
-CONSTRAINT_NAMES = ["Flooding", 
-                    "Entrainment", 
-                    "Weeping", 
-                    "Downcomer backup", 
+CONSTRAINT_NAMES = ["Flooding",
+                    "Entrainment",
+                    "Weeping",
+                    "Downcomer backup",
                     "Residence time"]
 
 def columnconstraints(parameters, design):
-    L, V, rho_l, rho_v, mu, sigma, turn_down, t_plate, l_calm = parameters
-    d_col, theta, d_hole, l_pitch, l_spacing, h_weir, h_ap = design
+    L, V, rho_l, rho_v, sigma, turn_down, t_shell, l_calm, Nplates = parameters
+    d_col, theta, d_hole, l_pitch, l_spacing, h_weir, h_ap, t_plate = design
 
     # Geometry calculations
     l_weir = d_col*numpy.sin(theta/2)  # calculated using trig
@@ -109,33 +111,51 @@ def columnconstraints(parameters, design):
     return _constraints(V, L) + _constraints(V*turn_down, L*turn_down)
 
 def check_design(parameters, design):
+
+    print("Parameters:")
+    print(parameters)
+
+    print("Design:")
+    print(design)
+
     names = CONSTRAINT_NAMES + [f'{n} at turndown' for n in CONSTRAINT_NAMES]
     values = columnconstraints(parameters, design)
+
+    print("Constraints:")
     for v, n in zip(values, names):
         status = '✅' if v > 0 else '🚫'
         print(f'{status} {n}: {v}')
 
+    print("Cost:")
+
+    print(materials(parameters, design))
+
 if __name__ == "__main__":
-    V_w = 55.5*55.6/3600
-    L_w = 811.6*18/3600
-    rho_v = 0.72
-    rho_l = 954
-    mu = 1e-4  # could not find value in C&R, not used in constraints though
-    sigma = 57e-3
-    turn_down = 0.7
-    t_plate = 5e-3
-    l_calm = 50e-3
+    # We check the design in Example 11.2 and Example 11.11 in C+R
 
-    d_col = 0.79
-    d_hole = 5e-3
-    theta = 99/180*numpy.pi
-    l_spacing = 0.5
-    l_pitch = 12.5e-3
-    h_weir = 50e-3
-    h_ap = 40e-3
+    # Note in the design they design the bottom plate only, but we assume
+    # the same plate design throughout
+    parameters = Parameters(
+        L_w=811.6*18/3600,
+        V_w=55.5*55.6/3600,
+        rho_l=954,
+        rho_v=0.72,
+        sigma=57e-3,
+        turn_down=0.7,
+        t_shell=6e-3,
+        l_calm=50e-3,
+        Nplates=25,
+    )
 
-    parameters = [V_w, L_w, rho_v, rho_l, mu, sigma, turn_down, t_plate, l_calm]
-    design = [d_col, d_hole, theta, l_spacing, l_pitch, h_weir, h_ap]
+    design = Design(
+        d_col=0.79,
+        d_hole=5e-3,
+        theta=99/180*numpy.pi,
+        l_spacing=0.5,
+        l_pitch=12.5e-3,
+        h_weir=50e-3,
+        h_ap=40e-3,
+        t_plate=5e-3,
+    )
 
     check_design(parameters, design)
-
