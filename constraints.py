@@ -26,7 +26,7 @@ def table_K2(h):
     
     Regression by Carl Sandrock"""
     a, b, c, d = 26.52258403,  0.76197575, 13.23116619, 33.1867269
-    return a + b*numpy.sqrt(numpy.abs(h - c)) - (h - c)/d
+    return a + b*numpy.sqrt(numpy.sqrt((h - c)**2)) - (h - c)/d
 
 
 def table_C0(A_ratio, P_ratio):
