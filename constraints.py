@@ -98,7 +98,7 @@ def columnconstraints(parameters, design):
         h_t = h_d + h_ow + h_weir + h_r
 
         # down comer backup
-        A_m = min(A_down, l_weir * h_ap)  # ideally would not have this so as to keep function smooth
+        A_m = l_weir * h_ap
         h_dc = 0.166*(L_w/rho_l/A_m)**2  # m
         h_b = h_weir + h_ow + h_t + h_dc
 
