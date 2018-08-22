@@ -10,7 +10,7 @@ def materials(parameters, design):
     spacing = design.l_spacing
 
     r = diameter/2
-    shell_cost = numpy.pi*r*shell_thickness*spacing
+    shell_cost = (numpy.pi*diameter)*(plates*spacing)*shell_thickness  # circumference * height * thickness
     plate_area = numpy.pi*r**2
     downcomer_area = (angle - numpy.sin(angle))*r**2/2
     plate_cost = plates*plate_thickness*(plate_area - downcomer_area)
