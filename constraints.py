@@ -2,6 +2,7 @@
 from costs import materials
 from classes import Parameters, Design
 
+
 def table_K1(Flv, l_spacing):
     """Figure 11-27
     
@@ -42,6 +43,7 @@ CONSTRAINT_NAMES = ["Flooding",
                     "Weeping",
                     "Downcomer backup",
                     "Residence time"]
+
 
 def columnconstraints(parameters, design):
     L, V, rho_l, rho_v, sigma, turn_down, t_shell, l_calm, Nplates = parameters
@@ -110,6 +112,7 @@ def columnconstraints(parameters, design):
     
     return _constraints(V, L) + _constraints(V*turn_down, L*turn_down)
 
+
 def check_design(parameters, design):
 
     print("Parameters:")
@@ -129,6 +132,7 @@ def check_design(parameters, design):
     print("Cost:")
 
     print(materials(parameters, design))
+
 
 if __name__ == "__main__":
     # We check the design in Example 11.2 and Example 11.11 in C+R
