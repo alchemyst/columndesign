@@ -26,7 +26,7 @@ def table_K2(h):
     
     Regression by Carl Sandrock"""
     a, b, c, d = 26.52258403,  0.76197575, 13.23116619, 33.1867269
-    return a + b*numpy.sqrt(numpy.abs(h - c)) - (h - c)/d
+    return a + b*numpy.sqrt(numpy.sqrt((h - c)**2)) - (h - c)/d
 
 
 def table_C0(A_ratio, P_ratio):
@@ -98,7 +98,7 @@ def columnconstraints(parameters, design):
         h_t = h_d + h_ow + h_weir + h_r
 
         # down comer backup
-        A_m = min(A_down, l_weir * h_ap)  # ideally would not have this so as to keep function smooth
+        A_m = l_weir * h_ap
         h_dc = 0.166*(L_w/rho_l/A_m)**2  # m
         h_b = h_weir + h_ow + h_t + h_dc
 
