@@ -5,10 +5,10 @@ from pyomo.environ import sin
 def materials(parameters, design):
 
     diameter = design['d_col']
-    shell_thickness = parameters['t_shell']
+    shell_thickness = parameters.t_shell
     plate_thickness = design['t_plate']
     angle = design['theta']
-    plates = parameters['Nplates']
+    plates = parameters.Nplates
     spacing = design['l_spacing']
 
     r = diameter/2
