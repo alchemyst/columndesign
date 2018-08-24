@@ -1,4 +1,4 @@
-﻿import numpy
+import numpy
 from costs import materials
 from classes import Parameters, Design
 
@@ -152,14 +152,14 @@ if __name__ == "__main__":
     )
 
     design = Design(
-    	d_col=0.79,
-    	theta=99/180*numpy.pi,
-    	d_hole=5e-3,
-    	l_pitch=12.5e-3,
-    	l_spacing=0.5,
-    	h_weir=50e-3,
-    	h_ap=40e-3,
-    	t_plate=5e-3,
+        d_col=0.79,
+        theta=99/180*numpy.pi,
+        d_hole=5e-3,
+        l_pitch=12.5e-3,
+        l_spacing=0.5,
+        h_weir=50e-3,
+        h_ap=40e-3,
+        t_plate=5e-3,
     )
 
     check_design(parameters, design)
