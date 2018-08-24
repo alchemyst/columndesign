@@ -1,6 +1,7 @@
-﻿import numpy
 from costs import materials
 from classes import Parameters, Design
+from pyomo.environ import sin, cos, log, log10, exp, sqrt, acos
+from numpy import pi
 
 
 def table_K1(Flv, l_spacing):
@@ -9,7 +10,7 @@ def table_K1(Flv, l_spacing):
     Regression by Dazzles
     """
     a, b, c, d, e, f, g = -0.4141022057164735, -0.15097503976930754, -0.03955953480149698, -0.6833440064263923, 1.2631972777123914,       -0.10683783034172412, -1.8165949194259345
-    return 10**(a*numpy.log10(Flv) + b*(numpy.log10(Flv))**2 + c*numpy.exp(Flv) + d*l_spacing**2 + e*l_spacing + f*numpy.log10(Flv)*l_spacing + g)
+    return 10**(a*log10(Flv) + b*(log10(Flv))**2 + c*exp(Flv) + d*l_spacing**2 + e*l_spacing + f*log10(Flv)*l_spacing + g)
 
 
 def table_psi(Flv, flood):
@@ -18,7 +19,7 @@ def table_psi(Flv, flood):
     Regression by Dazzles
     """
     a, b, c, d, e, f = -1.7890463988780416, 0.3276578078888633, -0.00016483063266354298, 0.029666898603030227, -0.011235456340583339, -2.8085647498602717
-    return 10**(a*numpy.exp(numpy.log10(Flv)) + b*numpy.log10(Flv) + c*flood**2 + d*flood + e*numpy.log10(Flv)*flood + f)
+    return 10**(a*exp(log10(Flv)) + b*log10(Flv) + c*flood**2 + d*flood + e*log10(Flv)*flood + f)
 
 
 def table_K2(h):
@@ -26,7 +27,7 @@ def table_K2(h):
     
     Regression by Carl Sandrock"""
     a, b, c, d = 26.52258403,  0.76197575, 13.23116619, 33.1867269
-    return a + b*numpy.sqrt(numpy.sqrt((h - c)**2)) - (h - c)/d
+    return a + b*sqrt(sqrt((h - c)**2)) - (h - c)/d
 
 
 def table_C0(A_ratio, P_ratio):
@@ -50,22 +51,22 @@ def columnconstraints(parameters, design):
     d_col, theta, d_hole, l_pitch, l_spacing, h_weir, h_ap, t_plate = design
 
     # Geometry calculations
-    l_weir = d_col*numpy.sin(theta/2)  # calculated using trig
+    l_weir = d_col*sin(theta/2)  # calculated using trig
 
-    h = d_col/2*numpy.cos(theta/2)
+    h = d_col/2*cos(theta/2)
     h1 = h - l_calm
     d1 = d_col - 2*l_calm
     
-    theta1 = 2*numpy.arccos(h1/(d1/2))
-    A1 = (theta1 - numpy.sin(theta1))/2*(d1/2)**2
+    theta1 = 2*acos(h1/(d1/2))
+    A1 = (theta1 - sin(theta1))/2*(d1/2)**2
 
     # Areas
-    A_col = numpy.pi/4*d_col**2
-    A_h = numpy.pi/4*d_hole**2
-    A_down = (theta - numpy.sin(theta))/2*(d_col/2)**2
+    A_col = pi/4*d_col**2
+    A_h = pi/4*d_hole**2
+    A_down = (theta - sin(theta))/2*(d_col/2)**2
     # A_active = A_col - 2 * A_down
-    A_p = numpy.pi/4*d1**2 - 2*A1
-    A_hs = (A_h / 2)/(numpy.sqrt(3)/4*l_pitch**2)*A_p
+    A_p = pi/4*d1**2 - 2*A1
+    A_hs = (A_h / 2)/(sqrt(3)/4*l_pitch**2)*A_p
     A_net = A_col - A_down
 
     def _constraints(V_w, L_w):
@@ -153,7 +154,7 @@ if __name__ == "__main__":
 
     design = Design(
     	d_col=0.79,
-    	theta=99/180*numpy.pi,
+    	theta=99/180*pi,
     	d_hole=5e-3,
     	l_pitch=12.5e-3,
     	l_spacing=0.5,
