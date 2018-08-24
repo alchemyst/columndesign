@@ -153,10 +153,10 @@ if __name__ == "__main__":
 
     design = Design(
         d_col=0.79,
-        d_hole=5e-3,
         theta=99/180*numpy.pi,
-        l_spacing=0.5,
+        d_hole=5e-3,
         l_pitch=12.5e-3,
+        l_spacing=0.5,
         h_weir=50e-3,
         h_ap=40e-3,
         t_plate=5e-3,
